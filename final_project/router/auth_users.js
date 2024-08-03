@@ -54,8 +54,23 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   const ISBN = req.params.isbn;
   const review = req.query.review;
   const book = books[ISBN];
-  book.reviews[req.session.authorization.username] = review;
+  const username = req.session.authorization.username;
+  book.reviews[username] = review;
   return res.send(books[ISBN]);
+});
+
+// Delete user's review by ISBN 
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const ISBN = req.params.isbn;
+  const book = books[ISBN];
+  const username = req.session.authorization.username;
+
+  if (book && username && book.reviews[username]) {
+    delete book.reviews[username];
+    return res.send(`${username}'s review for the book "${book.title}" was deleted.`);
+  }
+  
+  return res.send(`The review for the book "${book.title}" was not deleted.`);
 });
 
 module.exports.authenticated = regd_users;
