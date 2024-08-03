@@ -12,26 +12,33 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  return res.send(JSON.stringify(books, null, 4));
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const ISBN = req.params.isbn;
+  return res.send(books[ISBN]);
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const author = req.params.author;
+  const booksArray = Object.values(books);
+  const bookFiltered = booksArray.filter((book) => {
+    return book.author === author;
+  });
+  return res.send(bookFiltered);
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  const booksArray = Object.values(books);
+  const bookFiltered = booksArray.filter((book) => {
+    return book.title === title;
+  });
+  return res.send(bookFiltered);
 });
 
 //  Get book review
