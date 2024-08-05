@@ -76,7 +76,16 @@ public_users.get('/author/:author',function (req, res) {
   const bookFiltered = booksArray.filter((book) => {
     return book.author === author;
   });
-  return res.send(bookFiltered);
+  const getBookByAuthor = new Promise((resolve, reject) => {
+    // Simulation of request to the database
+      setTimeout(() => {
+        return resolve(bookFiltered);
+      }, 1000);
+    });
+  
+    return getBookByAuthor.then((result) => {
+      return res.send(JSON.stringify(result, null, 4));
+    });
 });
 
 // Get all books based on title
