@@ -1,8 +1,10 @@
+// import getBooks from "../handlers/book-handler.js"
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+// const getBooks = require("../handlers/book-handler.js");
 
 // Check if a user with the given username already exists
 const doesExist = (username) => {
@@ -38,12 +40,26 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  return res.send(JSON.stringify(books, null, 4));
+public_users.get('/', (req, res) => {
+  const getBooks = new Promise((resolve, reject) => {
+  // Simulation of request to the database
+    setTimeout(() => {
+      return resolve(books);
+    }, 1000);
+  });
+
+  return getBooks.then((result) => {
+    return res.send(JSON.stringify(result, null, 4));
+  });
 });
 
+// axios.get('/')
+//   .then((response) => {
+//     return response.send(JSON.stringify(books, null, 4));
+//   });
+
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/isbn/:isbn', function (req, res) {
   const ISBN = req.params.isbn;
   return res.send(books[ISBN]);
  });
