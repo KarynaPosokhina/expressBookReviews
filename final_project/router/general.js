@@ -95,7 +95,16 @@ public_users.get('/title/:title',function (req, res) {
   const bookFiltered = booksArray.filter((book) => {
     return book.title === title;
   });
-  return res.send(bookFiltered);
+  const getBookByTitle = new Promise((resolve, reject) => {
+    // Simulation of request to the database
+      setTimeout(() => {
+        return resolve(bookFiltered);
+      }, 1000);
+    });
+  
+    return getBookByTitle.then((result) => {
+      return res.send(JSON.stringify(result, null, 4));
+    });
 });
 
 //  Get book review by ISBN
